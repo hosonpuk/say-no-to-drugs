@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Say No to Drugs</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+
+    <!-- Custom styles for this template -->
+    <link href="css/agency.min.css" rel="stylesheet">    
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  </head>
+  <style>
+    .hello{
+      font-family: arial;
+      color: orangered;
+      font-size: 110%;
+    }  
+    
+    .searchresult  {
+        border-radius: 15px;
+        opacity: 0.7;
+        background-color: lightyellow;
+        padding: 6px;
+    }
+    
+    .addbutton{
+      border-radius: 5px;
+      background-color: #FED136;
+      color: #424242;
+      border: 2px solid #d1af0a;
+      -webkit-transition-duration: 0.4s; /* Safari */
+      transition-duration: 0.4s;
+    }
+
+    .addbutton:hover {
+      background-color: #FFFFBE; /* Green */
+      color: black;
+      cursor: pointer;      
+    }
+  </style>
+  <script>  
+    var loginUser = "";    
+    
+    function handleResponse(response) {
+      //document.getElementById("content").innerHTML = "";
+      var contentCode = "<table>";
+      for (var i = 0; i < response.items.length; i++) {
+        var item = response.items[i];
+        contentCode += 
+         "<tr><td style='width:80%;padding:10px;'>" +
+         "<div class='searchresult'>" + 
+         "<a href='" + item.volumeInfo.previewLink + "' target='_blank' style='color:blue;'>" + 
+         item.volumeInfo.title + "<span style='font-size: 80%;font-style: italic;'> by " + item.volumeInfo.authors + "</span>" +
+         "</a>" + 
+         "<br/>" +
+         "</div>" +
+         "</td>";
+         if(!loginUser){
+          // NOT LOGGED IN, NO BUTTON
+         }else{
+          contentCode +=
+          "<td>" +
+          "<button class='addbutton' data-link='" + item.volumeInfo.previewLink + "' data-title='" + item.volumeInfo.title + "'>" + 
+          "Add to favourlist" + 
+          "</button><br/>" +
+          "</td>"; 
+         }
+         contentCode += "</tr>";        
+      }
+      contentCode += "</table>";
+      document.getElementById("content").innerHTML = contentCode;
+    }   
+    
+    $(document).ready(function()
+    { 
+      // CHECK LOGIN
+      $.ajax(
+      {
+        url: "http://port-7788.Puk_kwanho-hosonpuk430951.codeanyapp.com/CheckLogin", 
+				type: 'POST',
+				success: function(resultReturn)
+				{ 
+          if(!resultReturn){
+            document.getElementsByClassName("hello")[0].innerHTML = "Please login to add favourlist";
+          }else{
+            loginUser = resultReturn;
+            document.getElementsByClassName("hello")[0].innerHTML = "Hello " + loginUser + ", you may click a button to add favourlist";
+          }
+				},error: function (xhr, textStatus, errorThrown) 
+				{
+					alert("Login error.");
+					console.log(textStatus);
+          alert(xhr.responseText);
+      	}
+      });
+      
+      $("#btnSearch").click(function()
+      {        
+        var searchKeywords = $("#searchkey").val();
+        if(searchKeywords == "")
+          {
+            alert("Please fill the search keyword.");
+          }
+        else
+          { 
+            searchKeywords = searchKeywords.replace(" ","+");
+            $.getScript("https://www.googleapis.com/books/v1/volumes?q=" + searchKeywords + "&callback=handleResponse");            
+          }      
+      });
+
+      $('#btnLogout').click(function() 
+      {
+        $.ajax(
+          {
+            url: "http://port-7788.Puk_kwanho-hosonpuk430951.codeanyapp.com/Logout", 
+            type: 'POST',
+            data: '',
+            success: function(resultReturn)
+            { 
+            // show logout result
+              alert(resultReturn);
+              location.reload();
+            },error: function (xhr, textStatus, errorThrown) 
+            {
+              alert("Logout error.");
+              console.log(textStatus);
+              alert(xhr.responseText);
+            }
+          });
+      });      
+      
+      
+      $('#content').on('click','button', function (evt) {
+        var addtitle = $(this).attr('data-title');
+        var addlink = $(this).attr('data-link');
+        var mydata = "user=" + loginUser + "&title=" + addtitle + "&link=" + addlink;        
+
+        $.ajax(
+          {
+            url: "http://port-7788.Puk_kwanho-hosonpuk430951.codeanyapp.com/AddFavour", 
+            type: 'POST',
+            data: mydata,
+            success: function(resultReturn)
+            { 
+              // show login result
+              alert(resultReturn);
+            },error: function (xhr, textStatus, errorThrown) 
+            {
+              alert("Login error.");
+              console.log(textStatus);
+              alert(xhr.responseText);
+            }
+          });
+      });
+      
+    });
+    
+  </script>  
+<body id="page-top" style="background-color:black;">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="/">Say No to Drugs</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fa fa-bars"></i>
+        </button>
+         <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav text-uppercase ml-auto">
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="/Search">Search</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="/Info">Info</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="/Video">Video</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="/Game">Game</a>
+            </li>            
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="/Login">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="/Favour">Favourlist</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="/Signup">Sign Up</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#" id="btnLogout">Logout</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="masthead">
+      <div class="container">
+        <div>
+
+          <!-- MAIN CONTENT 1 START -->
+          
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+    <div class = "hello"></div><br/>
+    <table style="margin: auto;width: 40%;">
+      <tr>
+        <td>
+          <form id="searchformid" name="searchform">
+          Enter keyword <input type="text" id="searchkey"/>    
+          </form>  
+        </td>
+        <td>
+          <button id="btnSearch" class="addbutton">Search</button><br/>
+        </td>
+      </tr>  
+    </table>
+
+     
+    <br/>
+    <div id="content" style="margin: auto;width: 90%;padding: 3px;">
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>      
+    </div>
+          <!-- MAIN CONTENT 1 END -->
+  
+
+        </div>
+      </div>
+    </header>
+
+          <!-- MAIN CONTENT 2 START --> 
+  
+    
+
+          <!-- MAIN CONTENT 2 END -->
+  
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4">
+            <span class="copyright" style="color:lightblue;">Copyright &copy; Puk Kwan Ho, Hoson 2018</span>
+          </div>
+          
+          <div class="col-md-4">
+            <ul class="list-inline quicklinks">
+              <li class="list-inline-item">
+                <a href="#" style="color:lightblue;">Privacy Policy</a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#" style="color:lightblue;">Terms of Use</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Contact form JavaScript -->
+    <script src="js/jqBootstrapValidation.js"></script>
+    <script src="js/contact_me.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="js/agency.min.js"></script>
+
+  
+  
+  
+        
+    
+  </body>
+</html>

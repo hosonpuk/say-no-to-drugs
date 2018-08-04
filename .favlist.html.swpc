@@ -1,0 +1,41 @@
+<html>
+
+
+
+
+<script>
+$document.ready(){
+
+
+$(button).click(function(){
+content=$()
+$.ajax(
+				{	
+					url: "http://port-9999.codeanyapp.com/fav", 
+					type: 'POST',
+					data: "id="+localStorage.getItem("loginID")+"&fav="+localStorage.getItem("favlist"),
+					success: function(result){
+						checkFav(result);
+					},error: function (xhr, textStatus, errorThrown) {
+						//alert(textStatus);
+						console.log(textStatus);
+					}
+				}
+			);	
+
+			
+});			
+
+}
+</script>
+<br>
+<br>
+
+item1: ABC <button id="button1">Add to my favorite</button><br>
+
+item2: ABC <button id="button2">Add to my favorite</button>
+
+
+
+
+</html>

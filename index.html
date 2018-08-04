@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Say No to Drugs</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+
+    <!-- Custom styles for this template -->
+    <link href="css/agency.min.css" rel="stylesheet">
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
+
+    
+  </head>
+<script>
+$(document).ready(function()
+{   
+  htmlobj = $.ajax({
+    url:"http://api.openweathermap.org/data/2.5/weather?units=metric&id=1819729&APPID=f05d619022602f9bac43cc9febc0ba81",
+    async:false,
+    cache:false
+  });
+  var obj1 = jQuery.parseJSON(htmlobj.responseText);
+  $("#weather").html("<img src='http://openweathermap.org/img/w/" + 
+    obj1.weather[0].icon + ".png' /><br/>" +
+    obj1.name + "<br/>" +
+    obj1.main.temp + "°C" + " " + obj1.main.humidity + "%"               
+  );  
+  
+  
+    // CHECK LOGIN
+    $.ajax(
+    {
+      url: "http://port-7788.Puk_kwanho-hosonpuk430951.codeanyapp.com/CheckLogin", 
+      type: 'POST',
+      success: function(resultReturn)
+      { 
+        if(!resultReturn){
+          document.getElementsByClassName("hello")[0].innerHTML = "Welcome to Use Our Service";
+        }else{
+          loginUser = resultReturn;
+          document.getElementsByClassName("hello")[0].innerHTML = "Welcome " + loginUser + "!";
+        }
+      },error: function (xhr, textStatus, errorThrown) 
+      {
+        alert("Login error.");
+        console.log(textStatus);
+        alert(xhr.responseText);
+      }
+    });  
+
+  
+  $('#btnLogout').click(function() 
+	{
+    $.ajax(
+			{
+				url: "http://port-7788.Puk_kwanho-hosonpuk430951.codeanyapp.com/Logout", 
+				type: 'POST',
+				data: '',
+				success: function(resultReturn)
+				{ 
+        // show logout result
+          alert(resultReturn);
+          location.reload();
+				},error: function (xhr, textStatus, errorThrown) 
+				{
+				  alert("Logout error.");
+					console.log(textStatus);
+          alert(xhr.responseText);
+      	}
+			});
+  });
+  
+
+  
+  
+
+});  
+</script>  
+  <body id="page-top" style="background-color:#666666;">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="/">Say No to Drugs</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fa fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav text-uppercase ml-auto">
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="/Search">Search</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="/Info">Info</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="/Video">Video</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="/Game">Game</a>
+            </li>            
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="/Login">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="/Favour">Favourlist</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="/Signup">Sign Up</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#" id="btnLogout">Logout</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="masthead">
+      <div class="container" style="margin-top:-180px;">
+        <div class="intro-text">
+        <div id="weather"></div><br/>
+          <div class="intro-lead-in hello"></div>
+          <div class="intro-heading text-uppercase">It's Nice To Meet You</div>
+          <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="/Search">Start Searching</a>
+        </div>
+      </div>
+    </header>
+    
+    <section id="about">
+      <div class="container" style="margin-top:-100px;">
+        <div class="row">
+          <div class="col-lg-12 text-center">
+            <h2 class="section-heading text-uppercase">History of Narcotics Bureau</h2>
+            <h3 class="section-subheading text-muted"><span style="color:#FED136;">Established in 1954</span></h3>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12">
+            <ul class="timeline">
+              <li>
+                <div class="timeline-image">
+                  <img class="rounded-circle img-fluid" src="img/about/1.jpg" alt="">
+                </div>
+                <div class="timeline-panel">
+                  <div class="timeline-heading">
+                    <h4>1970's</h4>
+                    <h4 class="subheading">To begin with</h4>
+                  </div>
+                  <div class="timeline-body">
+                    <p class="text-muted"><span style="color:#FED136;">In the 70's, Narcotics Bureau dismantled several significant international trafficking syndicates and seized large amounts of illegal drugs. Several notorious international traffickers were charged, convicted and eventually sentenced to lengthy prison sentences.</span>
+                    </p>
+                  </div>
+                </div>
+              </li>
+              <li class="timeline-inverted">
+                <div class="timeline-image">
+                  <img class="rounded-circle img-fluid" src="img/about/2.jpg" alt="">
+                </div>
+                <div class="timeline-panel">
+                  <div class="timeline-heading">
+                    <h4>1980's</h4>
+                    <h4 class="subheading">Ordinance enacted</h4>
+                  </div>
+                  <div class="timeline-body">
+                    <p class="text-muted">
+                        <ul>
+                          <li><span style="color:#FED136;">Entering 1980’s, heroin continued dominating the drug market in Hong Kong</span></li>
+                          <li><span style="color:#FED136;">Towards the end of the 80’s, Hong Kong was still being exploited as a transit point for heroin going to western countries</span></li>
+                          <li><span style="color:#FED136;">The Drug Trafficking (Recovery of Proceeds) Ordinance 1989 was enacted in 1989</span></li>
+                        </ul>
+                    </p>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="timeline-image">
+                  <img class="rounded-circle img-fluid" src="img/about/3.jpg" alt="">
+                </div>
+                <div class="timeline-panel">
+                  <div class="timeline-heading">
+                    <h4>1990's & 2000 onward</h4>
+                    <h4 class="subheading">Young abusers</h4>
+                  </div>
+                  <div class="timeline-body">
+                    <p class="text-muted">
+                      <span style="color:#FED136;">                      
+                      The 1990's was an era for abuse of psychotropic drugs at rave parties and other dance venues. Many youngsters in those entertainment venues abused psychotropic drugs, especially ecstasy tablets. Towards the start of the new millennium, ketamine appeared in Hong Kong and rapidly became one of the most commonly abused drugs among young abusers.
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              </li>
+              <li class="timeline-inverted">
+                <div class="timeline-image">
+                  <img class="rounded-circle img-fluid" src="img/about/4.jpg" alt="">
+                </div>
+                <div class="timeline-panel">
+                  <div class="timeline-heading">
+                    <h4>From 2010 onwards</h4>
+                    <h4 class="subheading">Surge of NPS</h4>
+                  </div>
+                  <div class="timeline-body">
+                    <p class="text-muted">
+                      <span style="color:#FED136;">                      
+                      There has been a surge of new psychoactive substances (NPS) being promoted as legal stimulants, indoor cleansers, bath salts or herbal deodorants in overseas markets, and gaining popularity among drug abusers in the US and Europe. In light of this, the substances are locally being put under control of the Dangerous Drugs Ordinance; examples include synthetic cannabinoids, trifluoromethylphenylpiperazine and its piperazine derivatives, cathinone and its derivatives, salvia divinorum and its active ingredient salvinorin-A, gamma-butyrolactone (GBL), methoxetamine (MXE) and its derivatives, and alpha-phenylacetoacetonitrile (APPAN).  
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              </li>
+              <li class="timeline-inverted">
+                <div class="timeline-image">
+                  <h4>Let's<br>stop<br>drugs!
+                    </h4>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4">
+            <span class="copyright" style="color:lightblue;">Copyright &copy; Puk Kwan Ho, Hoson 2018</span>
+          </div>
+          <div class="col-md-4">
+            <ul class="list-inline quicklinks">
+              <li class="list-inline-item">
+                <a href="#" style="color:lightblue;">Privacy Policy</a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#" style="color:lightblue;">Terms of Use</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Contact form JavaScript -->
+    <script src="js/jqBootstrapValidation.js"></script>
+    <script src="js/contact_me.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="js/agency.min.js"></script>
+
+  </body>
+
+</html>

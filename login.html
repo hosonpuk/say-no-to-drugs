@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en"><html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Say No to Drugs</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+
+    <!-- Custom styles for this template -->
+    <link href="css/agency.min.css" rel="stylesheet">     
+  
+  
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <link rel="stylesheet" type="text/css "href="css/web.css"/>
+</head>
+<style>
+ .hello{
+    font-family: arial;
+    color: orangered;
+    font-size: 110%;
+  } 
+</style>
+
+<script>
+$(document).ready(function()
+{   
+    // CHECK LOGIN
+    $.ajax(
+    {
+      url: "http://port-7788.Puk_kwanho-hosonpuk430951.codeanyapp.com/CheckLogin", 
+      type: 'POST',
+      success: function(resultReturn)
+      { 
+        if(!resultReturn){
+          document.getElementsByClassName("hello")[0].innerHTML = "Please login.";
+        }else{
+          loginUser = resultReturn;
+          document.getElementsByClassName("hello")[0].innerHTML = "Hello " + loginUser + ", you have already logged in.";
+        }
+      },error: function (xhr, textStatus, errorThrown) 
+      {
+        alert("Login error.");
+        console.log(textStatus);
+        alert(xhr.responseText);
+      }
+    });  
+  
+  
+	// handle button clicks
+  /*
+  $('#buttonID').click(function() 
+	{
+		// make an ajax call
+		alert($('#formID').serialize());
+    $.ajax(
+		{
+            dataType: 'jsonp',
+            jsonpCallback: '_wrapper',
+            data: $('#formID').serialize(),
+            type: 'POST',
+            url: "http://port-7788.Puk_kwanho-hosonpuk430951.codeanyapp.com/Signup",
+            success: handleButtonResponse,
+        });
+    });
+  */
+  
+  $('#btnLogout').click(function() 
+	{
+    $.ajax(
+			{
+				url: "http://port-7788.Puk_kwanho-hosonpuk430951.codeanyapp.com/Logout", 
+				type: 'POST',
+				data: '',
+				success: function(resultReturn)
+				{ 
+        // show logout result
+          alert(resultReturn);
+          location.reload();
+				},error: function (xhr, textStatus, errorThrown) 
+				{
+				  alert("Logout error.");
+					console.log(textStatus);
+          alert(xhr.responseText);
+      	}
+			});
+  });
+  
+  $("#btnLogin").click(function()
+	{
+    var login=$("#login").val();
+    var pass=$("#mypass").val();     
+		
+		if(login == "" || pass == "")
+		{
+			alert("Please fill in username and password.");
+		}
+		else
+		{
+      var mydata="user="+login+"&pass="+pass;
+      $.ajax(
+				{
+					url: "http://port-7788.Puk_kwanho-hosonpuk430951.codeanyapp.com/Login", 
+					type: 'POST',
+					data: mydata,
+					success: function(resultReturn)
+					{ 
+            // show login result
+            alert(resultReturn);
+            window.location.href = "/";
+					},error: function (xhr, textStatus, errorThrown) 
+					{
+						alert("Login error.");
+						console.log(textStatus);
+            alert(xhr.responseText);
+      		}
+				});
+			}
+   }); 
+  
+  
+    function handleButtonResponse(data)
+    {
+      alert(data);
+      // parse the json string
+      var jsonObject = JSON.parse(data);
+      $('#reponseID').append( jsonObject.message );
+    }                       
+  
+  $("#btnSignUp").click(function()
+	{
+    window.location.href = "/Signup"
+  });
+});
+</script>
+<body id="page-top" style="background-color:black;">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="/">Say No to Drugs</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fa fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav text-uppercase ml-auto">
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="/Search">Search</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="/Info">Info</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="/Video">Video</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="/Game">Game</a>
+            </li>            
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="/Login">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="/Favour">Favourlist</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="/Signup">Sign Up</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#" id="btnLogout">Logout</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>  
+ 
+      <!-- Header -->
+    <header class="masthead">
+      <div class="container">
+        <div>
+
+          <!-- MAIN CONTENT 1 START -->
+          
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <div class = "hello"></div><br/>
+  <div class = "mask">
+
+  	<form id="formID" name="search">
+			Username: <input type="text" id="login"/><br/>
+      <br/>
+      Password: <input type="password" id="mypass"/><br/>
+      <br/>
+		</form>
+    <button id="btnLogin" class="button button1">Login</button><br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>    
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>    
+  </div>
+    </div>
+
+          <!-- MAIN CONTENT 1 END -->
+  
+
+        </div>
+      </div>
+    </header>
+  
+     <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4">
+            <span class="copyright" style="color:lightblue;">Copyright &copy; Puk Kwan Ho, Hoson 2018</span>
+          </div>
+          
+          <div class="col-md-4">
+            <ul class="list-inline quicklinks">
+              <li class="list-inline-item">
+                <a href="#" style="color:lightblue;">Privacy Policy</a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#" style="color:lightblue;">Terms of Use</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Contact form JavaScript -->
+    <script src="js/jqBootstrapValidation.js"></script>
+    <script src="js/contact_me.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="js/agency.min.js"></script>
+
+</body>
+
+</html>

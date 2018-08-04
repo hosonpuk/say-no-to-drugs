@@ -1,0 +1,130 @@
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <link rel="stylesheet" type="text/css "href="css/web.css"/>
+</head>
+ <style>
+   <tr>
+          <td class = "tabnum"></td>
+           <td class = "tabname"></td>
+           <td class = "tablink"></td>
+          </tr>
+          <tr>
+          <td class = "tabnum"></td>
+           <td class = "tabname"></td>
+           <td class = "tablink"></td>
+          </tr>
+  </style>
+
+<script>
+$(document).ready(function()
+{   
+	// handle button clicks         
+  $('#buttonID').click(function() 
+	{
+		// make an ajax call
+		alert($('#formID').serialize());
+    $.ajax(
+		{
+            dataType: 'jsonp',
+            jsonpCallback: '_wrapper',
+            data: $('#formID').serialize(),
+            type: 'POST',
+            url: "http://port-7788.Puk_kwanho-hosonpuk430951.codeanyapp.com/Signup",
+            success: handleButtonResponse,
+        });
+    });
+
+    function handleButtonResponse(data)
+    {
+      alert(data);
+      // parse the json string
+      var jsonObject = JSON.parse(data);
+      $('#reponseID').append( jsonObject.message );
+    }
+  
+  $("#btnSearch").click(function()
+	{
+		//alert("callnow");
+		var tempSearch;
+		//tempSearch = document.forms["search"]["searchkey"].value;
+		if(tempSearch == "")
+			{
+				alert("Please fill the field.");
+			}
+		else
+			{
+         var login=$("#login").val();
+         var pass=$("#mypass").val();
+        
+          var mydata="user="+login+"&pass="+pass;
+        alert(mydata);
+				$.ajax(
+				{
+					url: "http://port-7788.Puk_kwanho-hosonpuk430951.codeanyapp.com/Login", 
+					type: 'POST',
+					data: mydata,
+					success: function(resultReturn)
+					{ 
+						//alert("search success");
+           alert(resultReturn);
+						//alert(JSON.stringify(resultReturn));
+			      var _stringObj = JSON.stringify(resultReturn);
+			      var stringObj = JSON.parse(resultReturn);
+			      for(i = 0; i < stringObj.length; i++)
+            {
+					    var num = i + 1;
+					    document.getElementsByClassName("tabnum")[i].innerHTML = num;
+					    document.getElementsByClassName("tabname")[i].innerHTML = stringObj[i].texttitle;
+				      document.getElementsByClassName("tablink")[i].innerHTML = stringObj[i].command;
+				     }
+					},error: function (xhr, textStatus, errorThrown) 
+					{
+						alert("search failed");
+						console.log(textStatus);
+            alert(xhr.responseText);
+      		}
+				});
+			}
+   });
+});
+</script>
+<body>
+  <div class = "mask">
+	<div class = "style1">Personal Data Privacy</div>
+  <a href="/favlistpage">favourite list</a> <a href="/logout">log out</a>
+  	<br>
+  	<form id="formID" name="search">
+			login: <input type="text" id="login"/>
+      pass: <input type="text" id="mypass"/>
+		</form>
+  	<button id="btnSearch" class="button button1">
+    	search
+  	</button>
+    <br>
+  <table id="mytable">
+      <tr>
+          <td class = "tabnum"></td>
+           <td class = "tabname"></td>
+           <td class = "tablink"></td>
+          </tr>
+          <tr>
+          <td class = "tabnum"></td>
+           <td class = "tabname"></td>
+           <td class = "tablink"></td>
+          </tr>
+  </table>
+    <img src="apple.jpg">
+  <br>
+    <div class = "style3"><b>Article List</b>
+  <br>
+    <a href="/hklawprivacy">Personal Data (Privacy) Law in Hong Kong</a>
+  <br>
+    <a href="/protectdata">How to protect yourself in the social networks</a>
+  <br>
+    <a href="/socialnetwork">Something you should remember when using social network</a>
+  </div>
+    </div>
+</body>
+
+</html>
